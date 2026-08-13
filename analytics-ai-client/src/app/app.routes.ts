@@ -20,7 +20,7 @@ export const routes: Routes = [
         loadComponent: () => import('./features/chat/chat').then((m) => m.Chat),
       },
       {
-        path: 'create-user',
+        path: 'users',
         canActivate: [adminGuard],
         loadComponent: () => import('./features/create-user/create-user').then((m) => m.CreateUser),
       },

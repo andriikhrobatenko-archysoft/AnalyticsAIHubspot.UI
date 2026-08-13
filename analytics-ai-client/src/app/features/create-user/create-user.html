@@ -1,37 +1,136 @@
 <div class="create-user">
-  <h1 class="create-user__title">Create user</h1>
-  <p class="create-user__subtitle">Add a new account and assign its role.</p>
+  <h1 class="create-user__title">Manage users</h1>
+  <p class="create-user__subtitle">Create accounts, change roles, reset passwords, or remove access.</p>
 
-  <form class="create-user__form" [formGroup]="form" (ngSubmit)="submit()">
-    <label class="create-user__field">
-      <span>Username</span>
-      <input type="text" formControlName="username" autocomplete="off" />
-    </label>
+  <section class="create-user__section">
+    <div class="create-user__add-card">
+      <button
+        type="button"
+        class="create-user__section-toggle"
+        [class.create-user__section-toggle--open]="showCreateForm()"
+        (click)="toggleCreateForm()"
+      >
+        <span>+ Add user</span>
+        <svg
+          class="create-user__chevron"
+          viewBox="0 0 16 16"
+          width="12"
+          height="12"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M4 6l4 4 4-4" />
+        </svg>
+      </button>
 
-    <label class="create-user__field">
-      <span>Password</span>
-      <app-password-input formControlName="password" autocomplete="new-password" />
-    </label>
+      @if (showCreateForm()) {
+        <form class="create-user__form" [formGroup]="form" (ngSubmit)="submit()">
+          <label class="create-user__field">
+            <span>Username</span>
+            <input type="text" formControlName="username" autocomplete="off" />
+          </label>
 
-    <label class="create-user__field">
-      <span>Role</span>
-      <select formControlName="role">
-        @for (role of roles; track role) {
-          <option [value]="role">{{ role }}</option>
-        }
-      </select>
-    </label>
+          <label class="create-user__field">
+            <span>Password</span>
+            <app-password-input formControlName="password" autocomplete="new-password" />
+          </label>
 
-    @if (errorMessage()) {
-      <p class="create-user__error">{{ errorMessage() }}</p>
+          <label class="create-user__field">
+            <span>Role</span>
+            <select formControlName="role">
+              @for (role of roles; track role) {
+                <option [value]="role">{{ role }}</option>
+              }
+            </select>
+          </label>
+
+          @if (errorMessage()) {
+            <p class="create-user__error">{{ errorMessage() }}</p>
+          }
+
+          @if (successMessage()) {
+            <p class="create-user__success">{{ successMessage() }}</p>
+          }
+
+          <button type="submit" class="create-user__submit" [disabled]="form.invalid || submitting()">
+            {{ submitting() ? 'Creating…' : 'Create user' }}
+          </button>
+        </form>
+      }
+    </div>
+  </section>
+
+  <section class="create-user__section">
+    <h2 class="create-user__section-title">All users</h2>
+
+    @if (actionError()) {
+      <p class="create-user__error">{{ actionError() }}</p>
     }
 
-    @if (successMessage()) {
-      <p class="create-user__success">{{ successMessage() }}</p>
+    @if (loadingUsers()) {
+      <p class="create-user__hint">Loading…</p>
+    } @else if (users().length === 0) {
+      <p class="create-user__hint">No users yet.</p>
     }
 
-    <button type="submit" class="create-user__submit" [disabled]="form.invalid || submitting()">
-      {{ submitting() ? 'Creating…' : 'Create user' }}
-    </button>
-  </form>
+    <div class="create-user__list">
+      @for (user of users(); track user.id) {
+        <div class="create-user__row">
+          <div class="create-user__row-main">
+            <span class="create-user__row-name">
+              {{ user.username }}
+              @if (isSelf(user)) {
+                <span class="create-user__row-you">(you)</span>
+              }
+            </span>
+
+            <select
+              class="create-user__row-role"
+              [ngModel]="user.role"
+              [disabled]="isSelf(user) || roleUpdatingId() === user.id"
+              (ngModelChange)="changeRole(user, $event)"
+            >
+              @for (role of roles; track role) {
+                <option [value]="role">{{ role }}</option>
+              }
+            </select>
+
+            <div class="create-user__row-actions">
+              <button type="button" (click)="toggleReset(user.id)">Reset password</button>
+              <button
+                type="button"
+                class="create-user__row-delete"
+                [disabled]="isSelf(user) || deletingId() === user.id"
+                (click)="deleteUser(user)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+
+          @if (resettingUserId() === user.id) {
+            <div class="create-user__reset">
+              <app-password-input
+                [ngModel]="resetPasswordValue()"
+                (ngModelChange)="resetPasswordValue.set($event)"
+                autocomplete="new-password"
+              />
+              <button
+                type="button"
+                class="create-user__submit create-user__reset-save"
+                [disabled]="!resetPasswordValue() || resetSubmitting()"
+                (click)="submitReset(user.id)"
+              >
+                {{ resetSubmitting() ? 'Saving…' : 'Save' }}
+              </button>
+              <button type="button" (click)="toggleReset(user.id)">Cancel</button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
 </div>
