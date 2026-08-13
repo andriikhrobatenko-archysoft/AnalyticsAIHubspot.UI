@@ -1,0 +1,77 @@
+<div class="chat">
+  <aside class="chat__history">
+    <button type="button" class="chat__new" (click)="startNewChat()">+ New chat</button>
+
+    <div class="chat__history-list">
+      @if (sessions().length === 0) {
+        <p class="chat__history-empty">No conversations yet.</p>
+      }
+
+      @for (session of sessions(); track session.id) {
+        <div class="chat__history-item" [class.chat__history-item--active]="session.id === activeSessionId()">
+          <button type="button" class="chat__history-item-open" (click)="openSession(session.id)">
+            <span class="chat__history-preview">{{ session.preview || '(empty conversation)' }}</span>
+            <span class="chat__history-date">{{ session.updatedAt | date: 'MMM d, HH:mm' }}</span>
+          </button>
+          <button
+            type="button"
+            class="chat__history-delete"
+            title="Delete conversation"
+            aria-label="Delete conversation"
+            (click)="deleteSession(session.id, $event)"
+          >
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M4 4l8 8M12 4l-8 8" />
+            </svg>
+          </button>
+        </div>
+      }
+    </div>
+  </aside>
+
+  <div class="chat__main">
+    <div class="chat__messages">
+      @if (messages().length === 0) {
+        <p class="chat__empty">Ask a question about your business to get started.</p>
+      }
+
+      @for (message of messages(); track $index) {
+        <div class="chat__message-group chat__message-group--{{ message.role }}">
+          <div class="chat__message chat__message--{{ message.role }}">
+            @if (message.role === 'assistant') {
+              <div class="chat__markdown" [innerHTML]="message.content | markdown"></div>
+            } @else {
+              {{ message.content }}
+            }
+          </div>
+          <span class="chat__message-time">{{ message.timestamp | date: 'MMM d, HH:mm' }}</span>
+        </div>
+      }
+
+      @if (sending()) {
+        <div class="chat__message-group chat__message-group--assistant">
+          <div class="chat__message chat__message--assistant chat__message--pending">Thinking…</div>
+        </div>
+      }
+    </div>
+
+    @if (errorMessage()) {
+      <p class="chat__error">{{ errorMessage() }}</p>
+    }
+
+    <form class="chat__composer" (ngSubmit)="send()">
+      <input
+        type="text"
+        class="chat__input"
+        placeholder="Ask a question about your business…"
+        [ngModel]="question()"
+        (ngModelChange)="question.set($event)"
+        name="question"
+        autocomplete="off"
+      />
+      <button type="submit" class="chat__send" [disabled]="sending() || !question().trim()">
+        Send
+      </button>
+    </form>
+  </div>
+</div>

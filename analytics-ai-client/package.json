@@ -1,0 +1,55 @@
+{
+  "name": "analytics-ai-client",
+  "version": "0.0.0",
+  "description": "AnalyticsAI desktop client",
+  "author": "Archysoft",
+  "main": "app.js",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "electron": "electron .",
+    "electron-build": "ng build --configuration development && electron .",
+    "package:win": "ng build && electron-builder --win"
+  },
+  "private": true,
+  "packageManager": "npm@10.9.8",
+  "build": {
+    "appId": "com.archysoft.analyticsai",
+    "productName": "AnalyticsAI",
+    "files": [
+      "app.js",
+      "dist/analytics-ai-client/browser/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": "nsis"
+    }
+  },
+  "dependencies": {
+    "@angular/common": "^22.1.0",
+    "@angular/compiler": "^22.1.0",
+    "@angular/core": "^22.1.0",
+    "@angular/forms": "^22.1.0",
+    "@angular/platform-browser": "^22.1.0",
+    "@angular/router": "^22.1.0",
+    "marked": "^18.0.9",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.1.3",
+    "@angular/cli": "^22.1.3",
+    "@angular/compiler-cli": "^22.1.0",
+    "electron": "^43.3.0",
+    "electron-builder": "^26.15.3",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~6.0.2",
+    "vitest": "^4.0.8"
+  }
+}

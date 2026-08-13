@@ -1,0 +1,37 @@
+<div class="create-user">
+  <h1 class="create-user__title">Create user</h1>
+  <p class="create-user__subtitle">Add a new account and assign its role.</p>
+
+  <form class="create-user__form" [formGroup]="form" (ngSubmit)="submit()">
+    <label class="create-user__field">
+      <span>Username</span>
+      <input type="text" formControlName="username" autocomplete="off" />
+    </label>
+
+    <label class="create-user__field">
+      <span>Password</span>
+      <app-password-input formControlName="password" autocomplete="new-password" />
+    </label>
+
+    <label class="create-user__field">
+      <span>Role</span>
+      <select formControlName="role">
+        @for (role of roles; track role) {
+          <option [value]="role">{{ role }}</option>
+        }
+      </select>
+    </label>
+
+    @if (errorMessage()) {
+      <p class="create-user__error">{{ errorMessage() }}</p>
+    }
+
+    @if (successMessage()) {
+      <p class="create-user__success">{{ successMessage() }}</p>
+    }
+
+    <button type="submit" class="create-user__submit" [disabled]="form.invalid || submitting()">
+      {{ submitting() ? 'Creating…' : 'Create user' }}
+    </button>
+  </form>
+</div>

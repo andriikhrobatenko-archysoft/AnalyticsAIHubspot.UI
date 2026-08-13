@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AnalyticsAI</title>
+  <base href="./">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!--
+    Locked down for the packaged Electron shell (served over app://index, see app.js).
+    No 'unsafe-eval': Angular's AOT build doesn't need it. 'unsafe-inline' on style-src only:
+    Angular injects each component's styles as <style> tags at runtime: it doesn't need
+    script execution to do that, so script-src stays strict. connect-src lists both the
+    Azure API and the local dev API since this file is shared between build configs.
+  -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data:;
+    font-src 'self';
+    connect-src 'self' https://analyticsai-api-cygrf8hhese2d8e7.polandcentral-01.azurewebsites.net http://localhost:5139;
+    object-src 'none';
+    base-uri 'self';
+    frame-src 'none';
+  ">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

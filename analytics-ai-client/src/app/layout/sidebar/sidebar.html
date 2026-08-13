@@ -1,0 +1,24 @@
+<nav class="sidebar">
+  <div class="sidebar__brand">AnalyticsAI</div>
+
+  <ul class="sidebar__nav">
+    <li>
+      <a routerLink="/chat" routerLinkActive="sidebar__link--active" class="sidebar__link">Chat</a>
+    </li>
+    @if (auth.isAdmin()) {
+      <li>
+        <a routerLink="/create-user" routerLinkActive="sidebar__link--active" class="sidebar__link"
+          >Create user</a
+        >
+      </li>
+    }
+  </ul>
+
+  <div class="sidebar__footer">
+    <div class="sidebar__user">
+      <span class="sidebar__username">{{ auth.username() }}</span>
+      <span class="sidebar__role">{{ auth.role() }}</span>
+    </div>
+    <button type="button" class="sidebar__logout" (click)="logout()">Log out</button>
+  </div>
+</nav>
