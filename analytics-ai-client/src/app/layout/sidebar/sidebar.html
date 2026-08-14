@@ -5,6 +5,11 @@
     <li>
       <a routerLink="/chat" routerLinkActive="sidebar__link--active" class="sidebar__link">Chat</a>
     </li>
+    <li>
+      <a routerLink="/settings" routerLinkActive="sidebar__link--active" class="sidebar__link"
+        >Settings</a
+      >
+    </li>
     @if (auth.isAdmin()) {
       <li>
         <a routerLink="/users" routerLinkActive="sidebar__link--active" class="sidebar__link"

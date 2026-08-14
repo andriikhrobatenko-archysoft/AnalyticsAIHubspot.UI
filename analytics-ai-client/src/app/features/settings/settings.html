@@ -1,0 +1,35 @@
+<div class="settings">
+  <h1 class="settings__title">Settings</h1>
+  <p class="settings__subtitle">Personalize how the assistant responds to you.</p>
+
+  @if (loading()) {
+    <p class="settings__hint">Loading…</p>
+  } @else {
+    <div class="settings__card">
+      <label class="settings__toggle-row">
+        <div class="settings__toggle-text">
+          <span class="settings__toggle-label">Detailed responses</span>
+          <span class="settings__toggle-description">
+            Get a fuller answer that also briefly explains what was checked — which
+            categories were looked at and how they were combined — not just the final
+            numbers.
+          </span>
+        </div>
+        <input
+          type="checkbox"
+          class="settings__switch"
+          [checked]="detailedResponses()"
+          (change)="toggleDetailedResponses()"
+        />
+      </label>
+
+      @if (saving()) {
+        <p class="settings__hint">Saving…</p>
+      }
+
+      @if (errorMessage()) {
+        <p class="settings__error">{{ errorMessage() }}</p>
+      }
+    </div>
+  }
+</div>
