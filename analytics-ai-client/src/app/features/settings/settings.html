@@ -31,5 +31,44 @@
         <p class="settings__error">{{ errorMessage() }}</p>
       }
     </div>
+
+    @if (auth.isAdmin()) {
+      <div class="settings__card settings__card--spaced">
+        <div class="settings__toggle-text">
+          <span class="settings__toggle-label">Regenerate schema</span>
+          <span class="settings__toggle-description">
+            Rebuilds the assistant's understanding of the database from scratch — deletes the
+            current schema description and generates a fresh one from the live database. Use
+            this after changing tables, columns, or database connection settings.
+          </span>
+        </div>
+
+        <button
+          type="button"
+          class="settings__button"
+          [disabled]="regenerating()"
+          (click)="regenerateSchema()"
+        >
+          {{ regenerating() ? 'Regenerating…' : 'Regenerate schema' }}
+        </button>
+
+        @if (regenerateResult(); as result) {
+          <p class="settings__success">
+            Done — {{ result.tablesNow }} table{{ result.tablesNow === 1 ? '' : 's' }} now
+            described.
+            @if (result.changed) {
+              {{ result.addedTables.length }} added, {{ result.removedTables.length }} removed,
+              {{ result.changedTables.length }} changed since the previous version.
+            } @else {
+              Structure is unchanged since the previous version.
+            }
+          </p>
+        }
+
+        @if (regenerateError()) {
+          <p class="settings__error">{{ regenerateError() }}</p>
+        }
+      </div>
+    }
   }
 </div>

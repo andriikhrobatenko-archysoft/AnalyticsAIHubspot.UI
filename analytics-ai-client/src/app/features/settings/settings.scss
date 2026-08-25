@@ -94,3 +94,35 @@
   border-radius: var(--radius);
   font-size: 13px;
 }
+
+.settings__success {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border-radius: var(--radius);
+  font-size: 13px;
+}
+
+.settings__card--spaced {
+  margin-top: 16px;
+}
+
+.settings__button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+
+  &:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
