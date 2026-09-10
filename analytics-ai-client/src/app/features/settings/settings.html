@@ -54,11 +54,10 @@
 
         @if (regenerateResult(); as result) {
           <p class="settings__success">
-            Done — {{ result.tablesNow }} table{{ result.tablesNow === 1 ? '' : 's' }} now
-            described.
-            @if (result.changed) {
-              {{ result.addedTables.length }} added, {{ result.removedTables.length }} removed,
-              {{ result.changedTables.length }} changed since the previous version.
+            Done — {{ result.itemsNow }} pipelines, stages and properties now described.
+            @if (result.hasChanges) {
+              {{ result.added.length }} added, {{ result.removed.length }} removed,
+              {{ result.changed.length }} changed since the previous version.
             } @else {
               Structure is unchanged since the previous version.
             }
